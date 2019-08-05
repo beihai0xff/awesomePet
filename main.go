@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"runtime"
 )
+
 func main() {
 	Init()
 
@@ -40,7 +41,7 @@ func main() {
 	user.POST("/login", action.Login)
 	user.PUT("/reset", action.Reset)
 
-	visual.GET("/test", echarts.BarHandler)
+	visual.GET("/test", echarts.TotalHandler)
 
 	//search := jwt.Group("/search")
 
@@ -72,7 +73,6 @@ func Init() {
 	grpc.Init()
 }
 
-// Note: struct fields must be public in order for unmarshal to
 // correctly populate the data.
 type Conf struct {
 	GRPCAddress string `yaml:"gRPCAddress"`
@@ -83,6 +83,7 @@ type Conf struct {
 		Database     string `yaml:"Database"`
 	}
 }
+
 var c = Conf{}
 
 func ReadConfig() {

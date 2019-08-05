@@ -1,8 +1,8 @@
 package gorm_mysql
 
 import (
-	"Wade/api/debug"
-	"Wade/models"
+	"awesomePet/api/debug"
+	"awesomePet/models"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
