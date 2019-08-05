@@ -1,5 +1,9 @@
 # awesomePet
-<code>golang 1.11+</code> &nbsp; <code>echo V4</code> &nbsp; <code>proto3</code> &nbsp; <code>mysql 5.x+</code>
+
+[![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
+![Build Status](https://img.shields.io/badge/building-passing-green)
+[![Support](https://img.shields.io/badge/ECHO-V4-yellow)](https://echo.labstack.com/)
+![Support](https://img.shields.io/badge/Mysql-8.0%2B-green)
 
 一个使用 Golang 编写的后端服务 学习案例——在线宠物分享
 
