@@ -12,5 +12,5 @@ require (
 	github.com/labstack/echo/v4 v4.1.8
 	golang.org/x/crypto v0.0.0-20190621222207-cc06ce4a13d4
 	google.golang.org/grpc v1.22.1
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v3 v3.0.0-20190709130402-674ba3eaed22
 )

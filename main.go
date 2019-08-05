@@ -5,10 +5,11 @@ import (
 	"awesomePet/api/debug"
 	"awesomePet/echarts"
 	"awesomePet/gorm_mysql"
+	"awesomePet/grpc"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"net/http"
 	"runtime"
@@ -35,15 +36,13 @@ func main() {
 	jwt := e.Group("/jwt")
 	jwt.Use(middleware.JWT([]byte("secret")))
 
-	e.POST("/crawler", action.Crawler)
-
 	user.POST("/register", action.Register)
 	user.POST("/login", action.Login)
 	user.PUT("/reset", action.Reset)
 
 	visual.GET("/test", echarts.BarHandler)
 
-	search := jwt.Group("/search")
+	//search := jwt.Group("/search")
 
 	//查看请求信息
 	e.GET("/info", func(c echo.Context) error {

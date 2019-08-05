@@ -3,7 +3,7 @@
 
 一个使用 Golang 编写的后端服务 学习案例——在线宠物分享
 
-## Use
+## Usage
 #### Requirements
 Go version >= 1.11 and GO111MODULE=on； mysql >= 8.0；配置 conf.yaml 文件
 #### Build & Run
