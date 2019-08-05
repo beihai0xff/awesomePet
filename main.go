@@ -16,7 +16,8 @@ import (
 )
 
 func main() {
-	Init()
+	done := make(chan int)
+	go Init(done)
 
 	e := echo.New()
 	e.Pre(middleware.HTTPSRedirect())
@@ -60,17 +61,19 @@ func main() {
 		return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))
 	})
 
+	done <- 1
 	e.Logger.Fatal(e.StartTLS(":443", "./cert.pem", "./key.pem"))
 }
 
-func Init() {
+func Init(done chan int) {
 	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
 	fmt.Println("run CPUs number:", runtime.NumCPU())
 	ReadConfig()
-	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
 	gorm_mysql.Init(&args)
 	grpc.Init()
+	<-done
 }
 
 // correctly populate the data.
