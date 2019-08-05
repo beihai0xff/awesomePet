@@ -8,4 +8,3 @@ func UpdateUserPassword(user models.User) error {
 	}
 	return nil
 }
-

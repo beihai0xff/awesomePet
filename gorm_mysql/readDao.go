@@ -5,7 +5,7 @@ import (
 	. "awesomePet/models"
 )
 
-func GetUserSecret(uid *uint64) *User {
+func GetUserPassword(uid *uint64) *User {
 	m := new(User)
 	err := db.Where("uid = ?", uid).First(m).Error
 	debug.PrintErr(err)

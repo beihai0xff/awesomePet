@@ -3,7 +3,6 @@ package action
 import (
 	"awesomePet/api/debug"
 	"awesomePet/gorm_mysql"
-	"awesomePet/grpc"
 	"awesomePet/models"
 	"crypto/rand"
 	"crypto/sha256"
@@ -24,7 +23,7 @@ func Register(c echo.Context) error {
 	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.Password)
 	if gorm_mysql.Has(m.Uid) {
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "该用户已存在"})
-	} else if grpc.CreateUserClient(m.Uid) {
+	} else {
 		//pbkdf2加密
 		salt := make([]byte, 32)
 		_, err := rand.Read(salt)
@@ -32,13 +31,23 @@ func Register(c echo.Context) error {
 			return err
 		}
 		key := pbkdf2.Key([]byte(m.Password), salt, 1323, 32, sha256.New)
-		User := models.User{Uid: m.Uid, UserName: m.UserName, Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
+		User := models.User{Uid: m.Uid, Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
 		if err = gorm_mysql.CreateUser(&User); err != nil {
 			return err
 		}
+		UserInfo := models.UserInfo{
+			Uid:         m.Uid,
+			UserName:    m.UserName,
+			Sex:         m.Sex,
+			Description: m.Description,
+			Email:       m.Email,
+			City:        m.City,
+			Street:      m.Street,
+		}
+		if err = gorm_mysql.CreateUserInfo(&UserInfo); err != nil {
+			return err
+		}
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "注册成功"})
-	} else {
-		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "与区块连节点通信失败"})
 	}
 }
 
@@ -48,7 +57,7 @@ func Login(c echo.Context) error {
 		return err
 	}
 	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.Password)
-	userInfo := gorm_mysql.GetUserSecret(&m.Uid)
+	userInfo := gorm_mysql.GetUserPassword(&m.Uid)
 	getSalt, err := hex.DecodeString(userInfo.Salt)
 	debug.PanicErr(err)
 	key := pbkdf2.Key([]byte(m.Password), getSalt, 1323, 32, sha256.New)
@@ -58,7 +67,6 @@ func Login(c echo.Context) error {
 		// Set claims
 		claims := token.Claims.(jwt.MapClaims)
 		claims["uid"] = userInfo.Uid
-		claims["userName"] = userInfo.UserName
 		claims["exp"] = time.Now().Add(time.Hour * 72).Unix() //有效期三天
 		// Generate encoded token and send it as response.
 		t, err := token.SignedString([]byte("233333"))
@@ -70,12 +78,12 @@ func Login(c echo.Context) error {
 }
 
 func Reset(c echo.Context) error {
-	m := new(models.RequestReset)
+	m := new(models.PasswordReset)
 	if err := c.Bind(m); err != nil {
 		return err
 	}
 	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.OldPassword)
-	userInfo := gorm_mysql.GetUserSecret(&m.Uid)
+	userInfo := gorm_mysql.GetUserPassword(&m.Uid)
 	getSalt, err := hex.DecodeString(userInfo.Salt)
 	if err != nil {
 		return err
