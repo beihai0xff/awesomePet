@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/chenjiandongx/go-echarts v0.0.0-20190728043558-70059cac90d5
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/disintegration/imaging v1.6.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/golang/protobuf v1.3.2

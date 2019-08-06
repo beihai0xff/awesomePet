@@ -33,16 +33,22 @@ func main() {
 		Browse: true,
 	}))
 
-	user := e.Group("/user")
+	u := e.Group("/u")
+
+	u.POST("/register", action.Register)
+	u.POST("/login", action.Login)
+	u.PUT("/reset", action.Reset)
+
 	visual := e.Group("/visual")
-	jwt := e.Group("/jwt")
-	jwt.Use(middleware.JWT([]byte("secret")))
-
-	user.POST("/register", action.Register)
-	user.POST("/login", action.Login)
-	user.PUT("/reset", action.Reset)
-
 	visual.GET("/test", echarts.TotalHandler)
+
+	jwt := e.Group("/jwt")
+	jwt.Use(middleware.JWT([]byte("233333")))
+
+	user := jwt.Group("/user")
+	user.POST("/profile", action.ProfilePhoto)
+	user.GET("/profile", action.ThumbnailProfilePhoto)
+	user.GET("/info", action.GetUserInfo)
 
 	//search := jwt.Group("/search")
 

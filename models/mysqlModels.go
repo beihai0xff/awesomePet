@@ -9,10 +9,11 @@ type User struct {
 
 type UserInfo struct {
 	Uid         uint64 `json:"uid"  gorm:"primary_key"`
-	UserName    string `json:"username" gorm:"type:varchar(25); not null"`
+	Nickname    string `json:"nickname" gorm:"type:varchar(25); not null"`
 	Sex         uint64 `json:"sex" gorm:"column:sex; not null"`
 	Description string `json:"description" gorm:"type:varchar(25); not null"`
 	Email       string `json:"email" gorm:"type:varchar(25); not null"`
 	City        uint64 `json:"city" gorm:"not null"`
 	Street      string `json:"street" gorm:"type:varchar(64); not null"`
+	Ext         string `json:"ext" gorm:"type:varchar(6); not null"`
 }
