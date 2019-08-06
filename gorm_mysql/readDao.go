@@ -15,7 +15,8 @@ func GetUserPassword(uid *uint64) (*User, error) {
 
 func GetUserInfo(uid *uint64) (*UserInfo, error) {
 	m := new(UserInfo)
-	err := db.Where("uid = ?", uid).First(m).Error
-
+	if err := db.Where("uid = ?", uid).First(m).Error; err != nil {
+		return m, err
+	}
 	return m, nil
 }

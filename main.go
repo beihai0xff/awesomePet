@@ -33,8 +33,7 @@ func main() {
 		Browse: true,
 	}))
 
-	u := e.Group("/u")
-
+	u := e.Group("/user")
 	u.POST("/register", action.Register)
 	u.POST("/login", action.Login)
 	u.PUT("/reset", action.Reset)
@@ -43,7 +42,7 @@ func main() {
 	visual.GET("/test", echarts.TotalHandler)
 
 	jwt := e.Group("/jwt")
-	jwt.Use(middleware.JWT([]byte("233333")))
+	jwt.Use(middleware.JWT([]byte("yourSecret")))
 
 	user := jwt.Group("/user")
 	user.POST("/profile", action.ProfilePhoto)
@@ -77,6 +76,7 @@ func Init(done chan int) {
 	ReadConfig()
 	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
+	//fmt.Println(args)
 	gorm_mysql.Init(&args)
 	grpc.Init()
 	<-done
