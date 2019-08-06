@@ -23,7 +23,7 @@ func Register(c echo.Context) error {
 	if err := c.Bind(m); err != nil {
 		return err
 	}
-	if gorm_mysql.Has(m.Uid) {
+	if gorm_mysql.HasUser(m.Uid) {
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "该用户已存在"})
 	} else {
 		//pbkdf2加密
@@ -34,9 +34,9 @@ func Register(c echo.Context) error {
 		}
 		key := pbkdf2.Key([]byte(m.Password), salt, 1323, 32, sha256.New)
 		User := models.User{Uid: m.Uid, Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
-		if err = gorm_mysql.CreateUser(&User); err != nil {
-			return err
-		}
+		/*		if err = gorm_mysql.CreateUser(&User); err != nil {
+				return err
+			}*/
 		UserInfo := models.UserInfo{
 			Uid:         m.Uid,
 			Nickname:    m.UserName,
@@ -46,7 +46,10 @@ func Register(c echo.Context) error {
 			City:        m.City,
 			Street:      m.Street,
 		}
-		if err = gorm_mysql.CreateUserInfo(&UserInfo); err != nil {
+		/*		if err = gorm_mysql.CreateUserInfo(&UserInfo); err != nil {
+				return err
+			}*/
+		if err = gorm_mysql.CreateAccount(&User, &UserInfo); err != nil {
 			return err
 		}
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "注册成功"})
