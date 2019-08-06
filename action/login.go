@@ -171,3 +171,15 @@ func GetUserInfo(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, m)
 }
+
+func UpdateUserInfo(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	m, err := gorm_mysql.GetUserInfo(&uid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, m)
+}
