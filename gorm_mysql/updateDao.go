@@ -25,4 +25,5 @@ func UpdateUserInfo(uid uint64, userInfo *UserInfo) error {
 		return err
 	}
 	return nil
+
 }
