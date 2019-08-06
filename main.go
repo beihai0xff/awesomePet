@@ -76,8 +76,8 @@ func Init(done chan int) {
 	ReadConfig()
 	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
-	//fmt.Println(args)
 	gorm_mysql.Init(&args)
+	action.Init()
 	grpc.Init()
 	<-done
 }

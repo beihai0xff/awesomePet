@@ -18,7 +18,6 @@ import (
 	"time"
 )
 
-//TODO test
 func Register(c echo.Context) error {
 	m := new(models.RequestUser)
 	if err := c.Bind(m); err != nil {
@@ -129,14 +128,15 @@ func ProfilePhoto(c echo.Context) error {
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
 	file, err := c.FormFile("profile")
 	if err != nil {
-		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户名或密码错误"})
+		return err
 	}
 	tempPath := models.OriginalPPPath + file.Filename
 	if err = api.DataWrite(tempPath, file); err != nil {
+		fmt.Println(err)
 		return err //data copy
 	}
 	ext := path.Ext(tempPath)
-	filename := strconv.FormatUint(uid, 10) + ext
+	filename := uidString + ext
 	if err = os.Rename(tempPath, models.OriginalPPPath+filename); err != nil {
 		err = os.Remove(tempPath)
 		return err //file rename
@@ -153,9 +153,11 @@ func ProfilePhoto(c echo.Context) error {
 }
 
 func ThumbnailProfilePhoto(c echo.Context) error {
-	uid := c.QueryParam("uid")
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
 	ext := c.QueryParam("ext")
-	return c.Inline(models.ThumbnailPPPath+uid+ext, "thumbnail"+ext)
+	return c.Inline(models.ThumbnailPPPath+"tn_"+uidString+ext, "thumbnail"+ext)
 }
 
 func GetUserInfo(c echo.Context) error {
@@ -163,7 +165,6 @@ func GetUserInfo(c echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	uidString := claims["uid"].(string)
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
-	fmt.Println(uid)
 	m, err := gorm_mysql.GetUserInfo(&uid)
 	if err != nil {
 		return err
