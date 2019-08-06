@@ -75,10 +75,10 @@ func Login(c echo.Context) error {
 		token := jwt.New(jwt.SigningMethodHS256)
 		// Set claims
 		claims := token.Claims.(jwt.MapClaims)
-		claims["uid"] = userInfo.Uid
+		claims["uid"] = strconv.FormatUint(userInfo.Uid, 10)
 		claims["exp"] = time.Now().Add(time.Hour * 72).Unix() //有效期三天
 		// Generate encoded token and send it as response.
-		t, err := token.SignedString([]byte("233333"))
+		t, err := token.SignedString([]byte("yourSecret"))
 		if err != nil {
 			return err
 		}
@@ -112,7 +112,7 @@ func Reset(c echo.Context) error {
 		}
 		key := pbkdf2.Key([]byte(m.NewPassword), salt, 1323, 32, sha256.New)
 		user := models.User{Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
-		err := gorm_mysql.UpdateUserPassword(user)
+		err := gorm_mysql.UpdateUserPassword(&user)
 		if err != nil {
 			return err
 		}
@@ -125,10 +125,11 @@ func Reset(c echo.Context) error {
 func ProfilePhoto(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	uid := claims["uid"].(uint64)
-	file, err := c.FormFile("file")
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	file, err := c.FormFile("profile")
 	if err != nil {
-		return err
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户名或密码错误"})
 	}
 	tempPath := models.OriginalPPPath + file.Filename
 	if err = api.DataWrite(tempPath, file); err != nil {
@@ -160,7 +161,9 @@ func ThumbnailProfilePhoto(c echo.Context) error {
 func GetUserInfo(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
-	uid := claims["uid"].(uint64)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	fmt.Println(uid)
 	m, err := gorm_mysql.GetUserInfo(&uid)
 	if err != nil {
 		return err

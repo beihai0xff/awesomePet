@@ -2,6 +2,7 @@ package gorm_mysql
 
 import (
 	. "awesomePet/models"
+	"fmt"
 )
 
 func Has(uid uint64) bool {
@@ -9,14 +10,15 @@ func Has(uid uint64) bool {
 }
 
 func CreateUser(user *User) error {
-	if err := db.Create(&user).Error; err != nil {
+	fmt.Println(*user)
+	if err := db.Create(user).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func CreateUserInfo(userInfo *UserInfo) error {
-	if err := db.Create(&userInfo).Error; err != nil {
+	if err := db.Create(userInfo).Error; err != nil {
 		return err
 	}
 	return nil
