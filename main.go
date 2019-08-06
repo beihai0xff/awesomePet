@@ -5,16 +5,19 @@ import (
 	"awesomePet/api/debug"
 	"awesomePet/echarts"
 	"awesomePet/gorm_mysql"
+	"awesomePet/grpc"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"net/http"
 	"runtime"
 )
+
 func main() {
-	Init()
+	done := make(chan int)
+	go Init(done)
 
 	e := echo.New()
 	e.Pre(middleware.HTTPSRedirect())
@@ -30,20 +33,24 @@ func main() {
 		Browse: true,
 	}))
 
-	user := e.Group("/user")
+	u := e.Group("/user")
+	u.POST("/register", action.Register)
+	u.POST("/login", action.Login)
+	u.PUT("/reset", action.Reset)
+
 	visual := e.Group("/visual")
+	visual.GET("/test", echarts.TotalHandler)
+
 	jwt := e.Group("/jwt")
-	jwt.Use(middleware.JWT([]byte("secret")))
+	jwt.Use(middleware.JWT([]byte("yourSecret")))
 
-	e.POST("/crawler", action.Crawler)
+	user := jwt.Group("/user")
+	user.POST("/profile", action.ProfilePhoto)
+	user.GET("/profile", action.ThumbnailProfilePhoto)
+	user.GET("/info", action.GetUserInfo)
+	user.PUT("/info", action.UpdateUserInfo)
 
-	user.POST("/register", action.Register)
-	user.POST("/login", action.Login)
-	user.PUT("/reset", action.Reset)
-
-	visual.GET("/test", echarts.BarHandler)
-
-	search := jwt.Group("/search")
+	//search := jwt.Group("/search")
 
 	//查看请求信息
 	e.GET("/info", func(c echo.Context) error {
@@ -60,20 +67,22 @@ func main() {
 		return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))
 	})
 
+	done <- 1
 	e.Logger.Fatal(e.StartTLS(":443", "./cert.pem", "./key.pem"))
 }
 
-func Init() {
+func Init(done chan int) {
 	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
 	fmt.Println("run CPUs number:", runtime.NumCPU())
 	ReadConfig()
-	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
 	gorm_mysql.Init(&args)
+	action.Init()
 	grpc.Init()
+	<-done
 }
 
-// Note: struct fields must be public in order for unmarshal to
 // correctly populate the data.
 type Conf struct {
 	GRPCAddress string `yaml:"gRPCAddress"`
@@ -84,6 +93,7 @@ type Conf struct {
 		Database     string `yaml:"Database"`
 	}
 }
+
 var c = Conf{}
 
 func ReadConfig() {

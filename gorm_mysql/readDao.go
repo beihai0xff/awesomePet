@@ -1,14 +1,22 @@
 package gorm_mysql
 
 import (
-	"awesomePet/api/debug"
 	. "awesomePet/models"
-	"github.com/jinzhu/gorm"
 )
 
-func GetUserSecret(uid *uint64) *User {
+func GetUserPassword(uid *uint64) (*User, error) {
 	m := new(User)
 	err := db.Where("uid = ?", uid).First(m).Error
-	debug.PrintErr(err)
-	return m
+	if err != nil {
+		return m, err
+	}
+	return m, nil
+}
+
+func GetUserInfo(uid *uint64) (*UserInfo, error) {
+	m := new(UserInfo)
+	if err := db.Where("uid = ?", uid).First(m).Error; err != nil {
+		return m, err
+	}
+	return m, nil
 }

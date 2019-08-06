@@ -2,7 +2,6 @@ package action
 
 import (
 	"fmt"
-	"github.com/labstack/echo/v4"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -11,11 +10,6 @@ import (
 	"sync"
 	"time"
 )
-
-func Crawler(c echo.Context) error {
-
-
-}
 
 //下面是个爬虫，暂时与业务代码没有关系
 var (
@@ -37,7 +31,7 @@ var (
 	urls []string
 )
 
-func Init() {
+func Start() {
 	var url, dirPath string
 
 	fmt.Printf("请输入链接：(默认%s)\n", TargetUrl)

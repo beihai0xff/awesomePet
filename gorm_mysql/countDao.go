@@ -1,2 +1,1 @@
 package gorm_mysql
-
