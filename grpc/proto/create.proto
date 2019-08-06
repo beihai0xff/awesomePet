@@ -1,0 +1,13 @@
+syntax = "proto3"; //Protocol Buffers Version
+package proto;
+
+//定义的service
+service CreateUser{
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse){}
+}
+message CreateUserRequest {
+    uint64 uid = 1;
+}
+message CreateUserResponse{
+    bool result = 1;//判断符，成功或失败
+}
