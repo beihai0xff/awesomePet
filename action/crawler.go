@@ -31,7 +31,7 @@ var (
 	urls []string
 )
 
-func Init() {
+func Start() {
 	var url, dirPath string
 
 	fmt.Printf("请输入链接：(默认%s)\n", TargetUrl)

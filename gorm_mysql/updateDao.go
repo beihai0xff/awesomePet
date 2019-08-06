@@ -8,3 +8,10 @@ func UpdateUserPassword(user models.User) error {
 	}
 	return nil
 }
+
+func UpdatePPExt(uid uint64, ext string) error {
+	if err := db.Model(&models.User{}).Where("uid = ?", uid).Update("ext", ext).Error; err != nil {
+		return err
+	}
+	return nil
+}
