@@ -23,7 +23,6 @@ func Register(c echo.Context) error {
 	if err := c.Bind(m); err != nil {
 		return err
 	}
-	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.Password)
 	if gorm_mysql.Has(m.Uid) {
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "该用户已存在"})
 	} else {
@@ -177,9 +176,21 @@ func UpdateUserInfo(c echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	uidString := claims["uid"].(string)
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
-	m, err := gorm_mysql.GetUserInfo(&uid)
-	if err != nil {
+	m := new(models.RequestUser)
+	if err := c.Bind(m); err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, m)
+	UserInfo := models.UserInfo{
+		Uid:         uid,
+		Nickname:    m.UserName,
+		Sex:         m.Sex,
+		Description: m.Description,
+		Email:       m.Email,
+		City:        m.City,
+		Street:      m.Street,
+	}
+	if err := gorm_mysql.UpdateUserInfo(uid, &UserInfo); err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "个人信息更新成功"})
 }

@@ -48,6 +48,7 @@ func main() {
 	user.POST("/profile", action.ProfilePhoto)
 	user.GET("/profile", action.ThumbnailProfilePhoto)
 	user.GET("/info", action.GetUserInfo)
+	user.PUT("/info", action.UpdateUserInfo)
 
 	//search := jwt.Group("/search")
 
