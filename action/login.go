@@ -100,7 +100,7 @@ func Reset(c echo.Context) error {
 		user := models.User{Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
 		err := gorm_mysql.UpdateUserPassword(user)
 		if err != nil {
-			return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "密码更新失败，请稍后重试"})
+			return err
 		}
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "密码更新成功"})
 	} else {
