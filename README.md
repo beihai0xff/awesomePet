@@ -1,17 +1,21 @@
 # awesomePet
-<code>golang 1.11+</code> &nbsp; <code>echo V4</code> &nbsp; <code>proto3</code> &nbsp; <code>mysql 5.x+</code>
+
+[![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
+![Build Status](https://img.shields.io/badge/building-passing-green)
+[![Support](https://img.shields.io/badge/ECHO-V4-yellow)](https://echo.labstack.com/)
+![Support](https://img.shields.io/badge/Mysql-8.0%2B-green)
 
 一个使用 Golang 编写的后端服务 学习案例——在线宠物分享
 
-## Use
+## Usage
 #### Requirements
-Go version >= 1.11 and GO111MODULE=on； mysql >= 8.0；配置 conf.yaml 文件
+Go version >= 1.11 and GO111MODULE=on；mysql >= 5.5.3；配置 conf.yaml 文件
 #### Build & Run
 ```bash
-$ git clone https://github.com/
+$ git clone https://github.com/wingsxdu/awesomePet.git
 $ cd Wade && go build
-$ export GOPROXY=https://goproxy.io //存在网络环境问题的可以设置代理
-$ chmod a+x Wade //linux下赋予文件执行权限
+$ export GOPROXY=https://goproxy.io // 存在网络环境问题的可以设置代理
+$ chmod a+x Wade // linux 下赋予文件执行权限
 $ ./Wade
 ```
 打开浏览器访问：[https://localhost:443/info] 查看 http 请求信息
@@ -20,7 +24,7 @@ $ ./Wade
 * 跨平台开发与交叉编译（启用CGO需关闭交叉编译）；
 * 远程程序调用,跨平台、跨语言进程间通信；
 * 数据可视化库，后台编译生成html；
-#### awesomePet有哪些功能？
+#### awesomePet 有哪些功能？
 * [Echo](https://echo.labstack.com/)：高性能、可扩展、简约的的Go Web框架;
 * [GORM](https://gorm.io/)：全功能数据库 orm 引擎；
 * [go-echarts](https://go-echarts.chenjiandongx.com/)：Golang 数据可视化第三方库；
@@ -39,7 +43,7 @@ $ ./Wade
 ```bash
 $ cd Wade && go run $GOROOT/src/crypto/tls/generate_cert.go --host localhost
 ```
-* IDE: Goland ,为方便作者在多设备上编程，.idea 文件夹一并上传到 github 上，可自行删除。
+* IDE: Goland，为方便作者在多设备上编程，.idea 文件夹一并上传到 github 上，可自行删除。
 
 #### why awesomePet?
 * 只是想做一个golang 后端开发的案例，并设计(脑部）了一个应用场景——在线宠物分享
