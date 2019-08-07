@@ -3,7 +3,7 @@ package models
 type RequestUser struct {
 	Uid         uint64 `json:"uid"`
 	UserName    string `json:"username"`
-	Sex         uint64 `json:"sex"`
+	Sex         uint8  `json:"sex"`
 	Description string `json:"description"`
 	Email       string `json:"email"`
 	City        uint64 `json:"city"`

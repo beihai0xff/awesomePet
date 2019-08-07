@@ -23,7 +23,7 @@ func main() {
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Logger())
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
-		StackSize: 4 << 10, // 4 KB
+		StackSize: 2 << 10, // 2 KB
 	}))
 	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Level: 5,

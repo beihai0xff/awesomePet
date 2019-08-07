@@ -133,7 +133,7 @@ func ProfilePhoto(c echo.Context) error {
 		return err
 	}
 	tempPath := models.OriginalPPPath + file.Filename
-	if err = api.DataWrite(tempPath, file); err != nil {
+	if err = api.FileWrite(tempPath, file); err != nil {
 		fmt.Println(err)
 		return err //data copy
 	}
