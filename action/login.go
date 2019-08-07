@@ -62,21 +62,21 @@ func Login(c echo.Context) error {
 		return err
 	}
 	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.Password)
-	userInfo, err := gorm_mysql.GetUserPassword(&m.Uid)
+	userPassword, err := gorm_mysql.GetUserPassword(&m.Uid)
 	if err != nil {
 		return err
 	}
-	getSalt, err := hex.DecodeString(userInfo.Salt)
+	getSalt, err := hex.DecodeString(userPassword.Salt)
 	if err != nil {
 		return err
 	}
 	key := pbkdf2.Key([]byte(m.Password), getSalt, 1323, 32, sha256.New)
-	if hex.EncodeToString(key) == userInfo.Key {
+	if hex.EncodeToString(key) == userPassword.Key {
 		// CreateUser token
 		token := jwt.New(jwt.SigningMethodHS256)
 		// Set claims
 		claims := token.Claims.(jwt.MapClaims)
-		claims["uid"] = strconv.FormatUint(userInfo.Uid, 10)
+		claims["uid"] = strconv.FormatUint(userPassword.Uid, 10)
 		claims["exp"] = time.Now().Add(time.Hour * 72).Unix() //有效期三天
 		// Generate encoded token and send it as response.
 		t, err := token.SignedString([]byte("yourSecret"))
@@ -196,4 +196,31 @@ func UpdateUserInfo(c echo.Context) error {
 		return err
 	}
 	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "个人信息更新成功"})
+}
+
+func DeleteUser(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	password := c.FormValue("password")
+	userPassword, err := gorm_mysql.GetUserPassword(&uid)
+	if err != nil {
+		return err
+	}
+	getSalt, err := hex.DecodeString(userPassword.Salt)
+	if err != nil {
+		return err
+	}
+	key := pbkdf2.Key([]byte(password), getSalt, 1323, 32, sha256.New)
+	if hex.EncodeToString(key) == userPassword.Key {
+		if ext, err := gorm_mysql.DeleteUser(uid); err != nil {
+			return err
+		} else {
+			_ = os.Remove(models.OriginalPPPath + uidString + ext)
+			_ = os.Remove(models.ThumbnailPPPath + uidString + ext)
+		}
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户注销成功"})
+	}
+	return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户名或密码错误"})
 }
