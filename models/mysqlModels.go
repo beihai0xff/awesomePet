@@ -33,12 +33,16 @@ type Pet struct {
 	Model
 	ID          uint   `json:"id" gorm:"column:id"`
 	Uid         uint64 `json:"uid" gorm:"index"`
+	Title       string `json:"title" gorm:"type:varchar(15)"`
 	Description string `json:"description" gorm:"type:varchar(140)"`
-	Pic         []Pic  `json:"pic" gorm:"foreignkey:ID"`
+	Pic         []Pic  `json:"pic" gorm:"ForeignKey:ReferID"`
+	//Tag         []string `json:"tag" gorm:"type:varchar(8)"`
+	Star uint `json:"star"`
 }
 
 type Pic struct {
-	ID      int    `json:"id" gorm:"column:pic_id"`
+	OrderID uint   `json:"orderId"`
+	ReferID uint   `json:"referId" gorm:"column:refer_id"`
 	PetHash string `json:"petHash" gorm:"type:char(64)"`
 	Ext     string `json:"ext" gorm:"type:varchar(6); not null"`
 }

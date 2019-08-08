@@ -46,8 +46,9 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	err = os.MkdirAll(tempPath, os.ModePerm) // mkdir
 	debug.PanicErr(err)
 	var m Pet
+	var i uint
 	files := form.File["files"]
-	for i, file := range files {
+	for _, file := range files {
 		// Source
 		src, err := file.Open()
 		if err != nil {
@@ -74,7 +75,8 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 			_ = os.Remove(filePath)
 			return &m, err //file rename
 		}
-		m.Pic = append(m.Pic, Pic{ID: i, PetHash: hash, Ext: ext})
+		m.Pic = append(m.Pic, Pic{OrderID: i, PetHash: hash, Ext: ext})
+		i++
 	}
 	return &m, nil
 }

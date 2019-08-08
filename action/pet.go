@@ -9,12 +9,13 @@ import (
 	"strconv"
 )
 
-func UploadPetBlog(c echo.Context) error {
+func UploadBlog(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	uidString := claims["uid"].(string)
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
 	description := c.FormValue("description")
+	title := c.FormValue("title")
 	form, err := c.MultipartForm()
 	if err != nil {
 		return err
@@ -25,6 +26,7 @@ func UploadPetBlog(c echo.Context) error {
 	} else {
 		m.Uid = uid
 		m.Description = description
+		m.Title = title
 		err := gorm_mysql.CreatePet(m)
 		if err != nil {
 			return err
@@ -32,4 +34,16 @@ func UploadPetBlog(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, m)
 	//return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog 发布成功"})
+}
+
+func GetUserBlog(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	m, err := gorm_mysql.GetUserBlog(&uid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, m)
 }

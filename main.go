@@ -39,8 +39,8 @@ func main() {
 	u.POST("/login", action.Login)
 	u.PUT("/reset", action.Reset)
 
-	visual := e.Group("/visual")
-	visual.GET("/test", echarts.TotalHandler)
+	v := e.Group("/v")
+	v.GET("/test", echarts.TotalHandler)
 
 	jwt := e.Group("/jwt")
 	jwt.Use(middleware.JWT([]byte("yourSecret")))
@@ -53,12 +53,13 @@ func main() {
 	user.DELETE("/info", action.DeleteUser)
 
 	pet := jwt.Group("/pet")
-	pet.POST("/blog", action.UploadPetBlog)
+	pet.POST("/blog", action.UploadBlog)
+	pet.GET("/blog", action.GetUserBlog)
 
 	//search := jwt.Group("/search")
 
 	//查看请求信息
-	e.GET("/info", func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		req := c.Request()
 		format := `
 			<code>
