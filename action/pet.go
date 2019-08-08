@@ -16,6 +16,7 @@ func UploadBlog(c echo.Context) error {
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
 	description := c.FormValue("description")
 	title := c.FormValue("title")
+	tag := c.FormValue("tag")
 	form, err := c.MultipartForm()
 	if err != nil {
 		return err
@@ -27,6 +28,7 @@ func UploadBlog(c echo.Context) error {
 		m.Uid = uid
 		m.Description = description
 		m.Title = title
+		m.Tag = tag
 		err := gorm_mysql.CreatePet(m)
 		if err != nil {
 			return err
@@ -45,5 +47,5 @@ func GetUserBlog(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, m)
+	return c.JSONPretty(http.StatusOK, m, " ")
 }

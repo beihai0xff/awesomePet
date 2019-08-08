@@ -36,8 +36,8 @@ type Pet struct {
 	Title       string `json:"title" gorm:"type:varchar(15)"`
 	Description string `json:"description" gorm:"type:varchar(140)"`
 	Pic         []Pic  `json:"pic" gorm:"ForeignKey:ReferID"`
-	//Tag         []string `json:"tag" gorm:"type:varchar(8)"`
-	Star uint `json:"star"`
+	Tag         string `json:"tag" gorm:"type:varchar(32)"` // 传过来json
+	Star        uint   `json:"star"`
 }
 
 type Pic struct {
