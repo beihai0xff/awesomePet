@@ -11,4 +11,5 @@ func Init() {
 	debug.PanicErr(err)
 	err = os.MkdirAll(ThumbnailPPPath, os.ModePerm) // mkdir
 	debug.PanicErr(err)
+
 }

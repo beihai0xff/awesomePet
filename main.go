@@ -22,6 +22,7 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Logger())
+	//e.Use(middleware.CORS())
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 2 << 10, // 2 KB
 	}))
@@ -50,6 +51,9 @@ func main() {
 	user.GET("/info", action.GetUserInfo)
 	user.PUT("/info", action.UpdateUserInfo)
 	user.DELETE("/info", action.DeleteUser)
+
+	pet := jwt.Group("/pet")
+	pet.POST("/blog", action.UploadPetBlog)
 
 	//search := jwt.Group("/search")
 

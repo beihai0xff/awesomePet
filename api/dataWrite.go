@@ -33,7 +33,7 @@ func FileWrite(filePath string, file *multipart.FileHeader) error {
 	return nil
 }
 
-func MultipartFileWrite(uid string, form *multipart.Form) error {
+func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	var builder strings.Builder
 	// 向builder中写入字符/字符串
 	builder.WriteString(OriginalFilePath)
@@ -41,37 +41,42 @@ func MultipartFileWrite(uid string, form *multipart.Form) error {
 	builder.WriteString("/")
 	tempPath := builder.String()
 	fmt.Println(tempPath)
+	err := os.MkdirAll(tempPath, os.ModePerm) // mkdir
+	debug.PrintErr(err)
+	err = os.MkdirAll(tempPath, os.ModePerm) // mkdir
+	debug.PanicErr(err)
 	var m Pet
 	files := form.File["files"]
 	for i, file := range files {
 		// Source
 		src, err := file.Open()
 		if err != nil {
-			return err
+			return &m, err
 		}
-		defer src.Close()
+		//defer src.Close()
 		filePath := tempPath + file.Filename
 		// Destination
 		dst, err := os.Create(filePath)
 		if err != nil {
-			return err
+			return &m, err
 		}
-		defer dst.Close()
+		//defer dst.Close()
 		// Copy
 		if _, err = io.Copy(dst, src); err != nil {
-			return err
+			return &m, err
 		}
-
+		err = dst.Close()
+		err = src.Close()
 		hash, err := DataHash(filePath)
 		debug.PrintErr(err)
 		ext := path.Ext(filePath)
 		if err = os.Rename(filePath, tempPath+hash+ext); err != nil {
-			err = os.Remove(tempPath)
-			return err //file rename
+			_ = os.Remove(filePath)
+			return &m, err //file rename
 		}
 		m.Pic = append(m.Pic, Pic{ID: i, PetHash: hash, Ext: ext})
 	}
-	return nil
+	return &m, nil
 }
 
 func Resize(filename string) error {

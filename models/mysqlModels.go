@@ -31,13 +31,14 @@ type UserInfo struct {
 
 type Pet struct {
 	Model
-	Uid         uint64 `json:"uid"  gorm:"primary_key"`
+	ID          uint   `json:"id" gorm:"column:id"`
+	Uid         uint64 `json:"uid" gorm:"index"`
 	Description string `json:"description" gorm:"type:varchar(140)"`
-	Pic         []Pic  `json:"pic"`
+	Pic         []Pic  `json:"pic" gorm:"foreignkey:ID"`
 }
 
 type Pic struct {
-	ID      int
+	ID      int    `json:"id" gorm:"column:pic_id"`
 	PetHash string `json:"petHash" gorm:"type:char(64)"`
 	Ext     string `json:"ext" gorm:"type:varchar(6); not null"`
 }

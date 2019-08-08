@@ -22,6 +22,13 @@ func CreateAccount(user *User, userInfo *UserInfo) error {
 	return tx.Commit().Error
 }
 
+func CreatePet(pet *Pet) error {
+	if err := db.Create(pet).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func CreateUser(user *User) error {
 	fmt.Println(*user)
 	if err := db.Create(user).Error; err != nil {

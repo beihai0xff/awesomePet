@@ -2,7 +2,6 @@ package gorm_mysql
 
 import (
 	. "awesomePet/models"
-	"fmt"
 )
 
 func UpdateUserPassword(user *User) error {
@@ -19,8 +18,7 @@ func UpdatePPExt(uid uint64, ext string) error {
 	return nil
 }
 
-func UpdateUserInfo(uid uint64, userInfo *UserInfo) error {
-	fmt.Println(uid)
+func UpdateUserInfo(userInfo *UserInfo) error {
 	if err := db.Model(userInfo).Omit("uid").Updates(userInfo).Error; err != nil {
 		return err
 	}

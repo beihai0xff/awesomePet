@@ -32,5 +32,17 @@ func Init(args *string) {
 			panic(err)
 		}
 	}
+	if !db.HasTable(&Pet{}) {
+		fmt.Println("表:pet不存在，正在创建中")
+		if err := db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4").CreateTable(&Pet{}).Error; err != nil {
+			panic(err)
+		}
+	}
+	if !db.HasTable(&Pic{}) {
+		fmt.Println("表:pic不存在，正在创建中")
+		if err := db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4").CreateTable(&Pic{}).Error; err != nil {
+			panic(err)
+		}
+	}
 	//defer db.Close()
 }

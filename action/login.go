@@ -192,7 +192,7 @@ func UpdateUserInfo(c echo.Context) error {
 		City:        m.City,
 		Street:      m.Street,
 	}
-	if err := gorm_mysql.UpdateUserInfo(uid, &UserInfo); err != nil {
+	if err := gorm_mysql.UpdateUserInfo(&UserInfo); err != nil {
 		return err
 	}
 	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "个人信息更新成功"})
@@ -220,7 +220,7 @@ func DeleteUser(c echo.Context) error {
 			_ = os.Remove(models.OriginalPPPath + uidString + ext)
 			_ = os.Remove(models.ThumbnailPPPath + uidString + ext)
 		}
-		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户注销成功"})
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "用户注销成功"})
 	}
 	return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "用户名或密码错误"})
 }
