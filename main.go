@@ -80,9 +80,12 @@ func main() {
 func Init(done chan int) {
 	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
 	fmt.Println("run CPUs number:", runtime.NumCPU())
-	ReadConfig()
+	var m = Conf{}
+	c := m.ReadConfig()
+	fmt.Println(c)
 	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
+	fmt.Println(args)
 	gorm_mysql.Init(&args)
 	action.Init()
 	grpc.Init()
@@ -100,12 +103,12 @@ type Conf struct {
 	}
 }
 
-var c = Conf{}
-
-func ReadConfig() {
+func (c Conf) ReadConfig() *Conf {
 	data, err := ioutil.ReadFile("config.yaml")
 	debug.PanicErr(err)
 	fmt.Println(string(data))
 	err = yaml.Unmarshal(data, &c)
+	fmt.Println(c)
 	debug.PanicErr(err)
+	return &c
 }
