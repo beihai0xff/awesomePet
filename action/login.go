@@ -144,7 +144,7 @@ func ProfilePhoto(c echo.Context) error {
 		return err //file rename
 	}
 	//生成缩略图
-	if err := api.Resize(filename); err != nil { //生成缩略图
+	if err := api.ShowPP(filename); err != nil { //生成缩略图
 		err = os.Remove(filename)
 		return err
 	}

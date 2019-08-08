@@ -22,7 +22,7 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Logger())
-	//e.Use(middleware.CORS())
+	e.Use(middleware.CORS())
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 2 << 10, // 2 KB
 	}))
@@ -80,13 +80,8 @@ func main() {
 func Init(done chan int) {
 	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
 	fmt.Println("run CPUs number:", runtime.NumCPU())
-	var m = Conf{}
-	c := m.ReadConfig()
-	fmt.Println(c)
-	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
-	fmt.Println(args)
-	gorm_mysql.Init(&args)
+	var c = Conf{}
+	c.ReadConfig()
 	action.Init()
 	grpc.Init()
 	<-done
@@ -103,12 +98,14 @@ type Conf struct {
 	}
 }
 
-func (c Conf) ReadConfig() *Conf {
+func (c Conf) ReadConfig() {
 	data, err := ioutil.ReadFile("config.yaml")
 	debug.PanicErr(err)
 	fmt.Println(string(data))
 	err = yaml.Unmarshal(data, &c)
-	fmt.Println(c)
 	debug.PanicErr(err)
-	return &c
+	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
+	fmt.Println(args)
+	gorm_mysql.Init(&args)
 }

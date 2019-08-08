@@ -4,7 +4,6 @@ import (
 	"awesomePet/api/debug"
 	. "awesomePet/models"
 	"bytes"
-	"fmt"
 	"github.com/disintegration/imaging"
 	"io"
 	"io/ioutil"
@@ -40,10 +39,9 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	builder.WriteString(uid)
 	builder.WriteString("/")
 	tempPath := builder.String()
-	fmt.Println(tempPath)
 	err := os.MkdirAll(tempPath, os.ModePerm) // mkdir
 	debug.PrintErr(err)
-	err = os.MkdirAll(tempPath, os.ModePerm) // mkdir
+	err = os.MkdirAll(ThumbnailFilePath+uid, os.ModePerm) // mkdir
 	debug.PanicErr(err)
 	var m Pet
 	var i uint
@@ -75,13 +73,36 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 			_ = os.Remove(filePath)
 			return &m, err //file rename
 		}
+		var builder strings.Builder
+		builder.WriteString(hash)
+		builder.WriteString(ext)
+		filePath = builder.String()
+		if err = Resize(&uid, &filePath); err != nil {
+			return &m, err
+		}
 		m.Pic = append(m.Pic, Pic{OrderID: i, PetHash: hash, Ext: ext})
 		i++
 	}
 	return &m, nil
 }
 
-func Resize(filename string) error {
+func Resize(uid, filename *string) error {
+	imgData, _ := ioutil.ReadFile(OriginalFilePath + *uid + "/" + *filename)
+	buf := bytes.NewBuffer(imgData)
+	image, err := imaging.Decode(buf)
+	if err != nil {
+		return err
+	}
+	//生成缩略图，传0表示等比例放缩
+	image = imaging.Resize(image, 0, 480, imaging.Lanczos)
+	err = imaging.Save(image, ThumbnailFilePath+*uid+"/tn_"+*filename)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ShowPP(filename string) error {
 	imgData, _ := ioutil.ReadFile(OriginalPPPath + filename)
 	buf := bytes.NewBuffer(imgData)
 	image, err := imaging.Decode(buf)
