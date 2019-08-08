@@ -21,15 +21,17 @@ func GetUserInfo(uid *uint64) (*UserInfo, error) {
 	return m, nil
 }
 
-func GetUserBlog(uid *uint64) (*Pet, error) {
-	m := new(Pet)
+func GetUserBlog(uid *uint64) (*[]Pet, error) {
+	var m []Pet
 	err := db.Where("uid = ?", uid).Find(&m).Error
 	if err != nil {
-		return m, err
+		return &m, err
 	}
-	err = db.Model(&m).Related(&m.Pic, "refer_id").Error
-	if err != nil {
-		return m, err
+	for i := range m {
+		err = db.Model(&m[i]).Related(&m[i].Pic, "refer_id").Error
+		if err != nil {
+			return &m, err
+		}
 	}
-	return m, nil
+	return &m, nil
 }
