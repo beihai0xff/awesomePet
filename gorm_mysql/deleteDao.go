@@ -27,7 +27,7 @@ func DeleteBlog(pet *Pet) error {
 		tx.Rollback()
 		return err
 	}
-	if err := tx.Delete(&Pic{}).Where("refer_id", pet.ID).Error; err != nil {
+	if err := tx.Where("refer_id = ?", pet.ID).Delete(&Pic{}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

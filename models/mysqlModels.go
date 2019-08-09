@@ -42,7 +42,7 @@ type Pet struct {
 
 type Pic struct {
 	OrderID uint   `json:"orderId"`
-	ReferID uint   `json:"referId" gorm:"column:refer_id"`
+	ReferID uint   `json:"referId" gorm:"column:refer_id; index"`
 	PetHash string `json:"petHash" gorm:"type:char(64)"`
 	Ext     string `json:"ext" gorm:"type:varchar(6); not null"`
 }
