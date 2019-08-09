@@ -35,3 +35,7 @@ func GetUserBlog(uid *uint64) (*[]Pet, error) {
 	}
 	return &m, nil
 }
+
+func GetBlogById(pet *Pet) error {
+	return db.First(&pet).Related(&pet.Pic, "refer_id").Error
+}

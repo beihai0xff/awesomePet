@@ -10,6 +10,18 @@ import (
 	"strconv"
 )
 
+func GetBlogById(c echo.Context) (err error) {
+	var id uint
+	if err := api.StrToUint(c.QueryParam("id"), &id); err != nil {
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "blog id未找到"})
+	}
+	m := models.Pet{ID: id}
+	if err = gorm_mysql.GetBlogById(&m); err != nil {
+		return
+	}
+	return c.JSON(http.StatusOK, m)
+}
+
 func UploadBlog(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
@@ -62,7 +74,7 @@ func DeleteBlog(c echo.Context) error {
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
 	var id uint
 	if err := api.StrToUint(c.Param("id"), &id); err != nil {
-		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog id未找到"})
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "blog id未找到"})
 	}
 	m := models.Pet{Uid: uid, ID: id}
 	if err := gorm_mysql.DeleteBlog(&m); err != nil {

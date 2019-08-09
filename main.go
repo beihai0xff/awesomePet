@@ -51,10 +51,11 @@ func main() {
 	user.GET("/info", action.GetUserInfo)
 	user.PUT("/info", action.UpdateUserInfo)
 	user.DELETE("/info", action.DeleteUser)
+	user.GET("/blog", action.GetUserBlog)
 
 	pet := jwt.Group("/pet")
+	pet.GET("/blog", action.GetBlogById)
 	pet.POST("/blog", action.UploadBlog)
-	pet.GET("/blog", action.GetUserBlog)
 	pet.PUT("/blog", action.UpdateBlogContext)
 	pet.DELETE("/blog/:id", action.DeleteBlog)
 
