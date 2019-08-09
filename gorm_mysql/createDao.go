@@ -2,44 +2,33 @@ package gorm_mysql
 
 import (
 	. "awesomePet/models"
-	"fmt"
 )
 
 func HasUser(uid uint64) bool {
 	return !db.Where("uid = ?", uid).First(&User{}).RecordNotFound()
 }
 
-func CreateAccount(user *User, userInfo *UserInfo) error {
+func CreateAccount(user *User, userInfo *UserInfo) (err error) {
 	tx := db.Begin()
 	if err := tx.Create(user).Error; err != nil {
 		tx.Rollback()
-		return err
+		return
 	}
 	if err := tx.Create(userInfo).Error; err != nil {
 		tx.Rollback()
-		return err
+		return
 	}
 	return tx.Commit().Error
 }
 
-func CreatePet(pet *Pet) error {
-	if err := db.Create(pet).Error; err != nil {
-		return err
-	}
-	return nil
+func CreatePet(pet *Pet) (err error) {
+	return db.Create(pet).Error
 }
 
-func CreateUser(user *User) error {
-	fmt.Println(*user)
-	if err := db.Create(user).Error; err != nil {
-		return err
-	}
-	return nil
+func CreateUser(user *User) (err error) {
+	return db.Create(user).Error
 }
 
-func CreateUserInfo(userInfo *UserInfo) error {
-	if err := db.Create(userInfo).Error; err != nil {
-		return err
-	}
-	return nil
+func CreateUserInfo(userInfo *UserInfo) (err error) {
+	return db.Create(userInfo).Error
 }

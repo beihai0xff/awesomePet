@@ -7,18 +7,13 @@ import (
 func GetUserPassword(uid *uint64) (*User, error) {
 	m := new(User)
 	err := db.Where("uid = ?", uid).First(m).Error
-	if err != nil {
-		return m, err
-	}
-	return m, nil
+	return m, err
 }
 
 func GetUserInfo(uid *uint64) (*UserInfo, error) {
 	m := new(UserInfo)
-	if err := db.Where("uid = ?", uid).First(m).Error; err != nil {
-		return m, err
-	}
-	return m, nil
+	err := db.Where("uid = ?", uid).First(m).Error
+	return m, err
 }
 
 func GetUserBlog(uid *uint64) (*[]Pet, error) {
@@ -33,7 +28,7 @@ func GetUserBlog(uid *uint64) (*[]Pet, error) {
 			return &m, err
 		}
 	}
-	return &m, nil
+	return &m, err
 }
 
 func GetBlogById(pet *Pet) error {

@@ -22,8 +22,8 @@ func DataHash(filePath string) (string, error) {
 	return dataHash, nil
 }
 
-func MsgHash(Msg string) string {
+func MsgHash(Msg *string) string {
 	h := sha256.New()
-	h.Write([]byte(Msg))
+	h.Write([]byte(*Msg))
 	return hex.EncodeToString(h.Sum(nil))
 }

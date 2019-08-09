@@ -13,23 +13,23 @@ import (
 	"strings"
 )
 
-func FileWrite(filePath string, file *multipart.FileHeader) error {
+func FileWrite(filePath string, file *multipart.FileHeader) (err error) {
 	src, err := file.Open()
 	if err != nil {
-		return err
+		return
 	}
 	defer src.Close()
 	// Destination
 	dst, err := os.Create(filePath)
 	if err != nil {
-		return err
+		return
 	}
 	defer dst.Close()
 	// Copy
 	if _, err := io.Copy(dst, src); err != nil {
-		return err
+		return
 	}
-	return nil
+	return
 }
 
 func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
@@ -86,20 +86,16 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	return &m, nil
 }
 
-func Resize(uid, filename *string) error {
+func Resize(uid, filename *string) (err error) {
 	imgData, _ := ioutil.ReadFile(OriginalFilePath + *uid + "/" + *filename)
 	buf := bytes.NewBuffer(imgData)
 	image, err := imaging.Decode(buf)
 	if err != nil {
-		return err
+		return
 	}
 	//生成缩略图，传0表示等比例放缩
 	image = imaging.Resize(image, 0, 480, imaging.Lanczos)
-	err = imaging.Save(image, ThumbnailFilePath+*uid+"/tn_"+*filename)
-	if err != nil {
-		return err
-	}
-	return nil
+	return imaging.Save(image, ThumbnailFilePath+*uid+"/tn_"+*filename)
 }
 
 func ShowPP(filename string) error {
@@ -109,11 +105,7 @@ func ShowPP(filename string) error {
 	if err != nil {
 		return err
 	}
-	//生成缩略图，传0表示等比例放缩
+	//生成缩略图
 	image = imaging.Resize(image, 72, 72, imaging.Lanczos)
-	err = imaging.Save(image, ThumbnailPPPath+"tn_"+filename)
-	if err != nil {
-		return err
-	}
-	return nil
+	return imaging.Save(image, ThumbnailPPPath+"tn_"+filename)
 }
