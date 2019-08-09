@@ -21,15 +21,15 @@ func DeleteUser(uid uint64) (string, error) {
 	return ext, tx.Commit().Error
 }
 
-func DeleteBlog(pet *Pet) (err error) {
+func DeleteBlog(pet *Pet) error {
 	tx := db.Begin()
 	if err := tx.Delete(pet).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	if err := tx.Where("refer_id = ?", pet.ID).Delete(&Pic{}).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	return tx.Commit().Error
 }

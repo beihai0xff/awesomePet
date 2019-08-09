@@ -23,11 +23,9 @@ func main() {
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
+	e.Use(middleware.Gzip())
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 2 << 10, // 2 KB
-	}))
-	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
-		Level: 5,
 	}))
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 		Root:   "echarts",

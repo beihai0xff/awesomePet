@@ -8,15 +8,15 @@ func HasUser(uid uint64) bool {
 	return !db.Where("uid = ?", uid).First(&User{}).RecordNotFound()
 }
 
-func CreateAccount(user *User, userInfo *UserInfo) (err error) {
+func CreateAccount(user *User, userInfo *UserInfo) error {
 	tx := db.Begin()
 	if err := tx.Create(user).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	if err := tx.Create(userInfo).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	return tx.Commit().Error
 }

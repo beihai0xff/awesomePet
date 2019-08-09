@@ -26,9 +26,7 @@ func FileWrite(filePath string, file *multipart.FileHeader) (err error) {
 	}
 	defer dst.Close()
 	// Copy
-	if _, err := io.Copy(dst, src); err != nil {
-		return
-	}
+	_, err = io.Copy(dst, src)
 	return
 }
 
