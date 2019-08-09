@@ -56,6 +56,7 @@ func main() {
 	pet.POST("/blog", action.UploadBlog)
 	pet.GET("/blog", action.GetUserBlog)
 	pet.PUT("/blog", action.UpdateBlogContext)
+	pet.DELETE("/blog/:id", action.DeleteBlog)
 
 	//search := jwt.Group("/search")
 

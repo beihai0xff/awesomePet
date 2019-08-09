@@ -1,7 +1,7 @@
 package gorm_mysql
 
 import (
-	"awesomePet/models"
+	. "awesomePet/models"
 )
 
 func DeleteUser(uid uint64) (string, error) {
@@ -10,13 +10,26 @@ func DeleteUser(uid uint64) (string, error) {
 	if err := db.Table("user_info").Select("ext").Where("uid = ?", uid).Scan(&ext).Error; err != nil {
 		return ext, err
 	}
-	if err := tx.Delete(&models.UserInfo{Uid: uid}).Error; err != nil {
+	if err := tx.Delete(&UserInfo{Uid: uid}).Error; err != nil {
 		tx.Rollback()
 		return ext, err
 	}
-	if err := tx.Delete(&models.User{Uid: uid}).Error; err != nil {
+	if err := tx.Delete(&User{Uid: uid}).Error; err != nil {
 		tx.Rollback()
 		return ext, err
 	}
 	return ext, tx.Commit().Error
+}
+
+func DeleteBlog(pet *Pet) error {
+	tx := db.Begin()
+	if err := tx.Delete(pet).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err := tx.Delete(&Pic{}).Where("refer_id", pet.ID).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
 }

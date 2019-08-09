@@ -55,6 +55,22 @@ func UpdateBlogContext(c echo.Context) error {
 	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog 重编辑成功"})
 }
 
+func DeleteBlog(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	var id uint
+	if err := api.StrToUint(c.Param("id"), &id); err != nil {
+		return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog id未找到"})
+	}
+	m := models.Pet{Uid: uid, ID: id}
+	if err := gorm_mysql.DeleteBlog(&m); err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog 删除成功"})
+}
+
 func GetUserBlog(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
