@@ -3,6 +3,7 @@ package action
 import (
 	"awesomePet/api"
 	"awesomePet/gorm_mysql"
+	"awesomePet/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -36,6 +37,22 @@ func UploadBlog(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, m)
 	//return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog 发布成功"})
+}
+
+func UpdateBlogContext(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	uidString := claims["uid"].(string)
+	uid, _ := strconv.ParseUint(uidString, 10, 64)
+	m := new(models.Pet)
+	if err := c.Bind(m); err != nil {
+		return err
+	}
+	if err := gorm_mysql.UpdatePet(uid, m); err != nil {
+		return err
+	}
+	//return c.JSON(http.StatusOK, m)
+	return c.JSON(http.StatusOK, models.ResultWithNote{Result: true, Note: "blog 重编辑成功"})
 }
 
 func GetUserBlog(c echo.Context) error {

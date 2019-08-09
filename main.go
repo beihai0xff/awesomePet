@@ -39,7 +39,7 @@ func main() {
 	u.POST("/login", action.Login)
 	u.PUT("/reset", action.Reset)
 
-	v := e.Group("/v")
+	v := e.Group("/visual")
 	v.GET("/test", echarts.TotalHandler)
 
 	jwt := e.Group("/jwt")
@@ -55,6 +55,7 @@ func main() {
 	pet := jwt.Group("/pet")
 	pet.POST("/blog", action.UploadBlog)
 	pet.GET("/blog", action.GetUserBlog)
+	pet.PUT("/blog", action.UpdateBlogContext)
 
 	//search := jwt.Group("/search")
 

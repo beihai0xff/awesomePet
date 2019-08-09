@@ -16,3 +16,10 @@ type PasswordReset struct {
 	NewPassword string `json:"newPassword"`
 	OldPassword string `json:"oldPassword"`
 }
+
+type RequestPet struct {
+	ID          uint   `json:"id" gorm:"column:id"`
+	Title       string `json:"title" gorm:"type:varchar(15)"`
+	Description string `json:"description" gorm:"type:varchar(140)"`
+	Tag         string `json:"tag" gorm:"type:varchar(32)"` // json
+}

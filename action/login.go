@@ -61,7 +61,6 @@ func Login(c echo.Context) error {
 	if err := c.Bind(m); err != nil {
 		return err
 	}
-	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.Password)
 	userPassword, err := gorm_mysql.GetUserPassword(&m.Uid)
 	if err != nil {
 		return err
