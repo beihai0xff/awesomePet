@@ -5,7 +5,7 @@
 [![Support](https://img.shields.io/badge/ECHO-V4-yellow)](https://echo.labstack.com/)
 ![Support](https://img.shields.io/badge/Mysql-8.0%2B-green)
 
-一个使用 Golang 编写的后端服务 学习案例——在线宠物分享
+一个使用 Golang 编写的后端服务学习案例——在线宠物分享
 
 ## Usage
 #### Requirements
@@ -18,12 +18,14 @@ $ export GOPROXY=https://goproxy.io // 存在网络环境问题的可以设置�
 $ chmod a+x Wade // linux 下赋予文件执行权限
 $ ./Wade
 ```
-打开浏览器访问：[https://localhost:443/info] 查看 http 请求信息
+打开浏览器访问：<https://localhost:443/info> 查看 http 请求信息
 
 ## Features
 * 跨平台开发与交叉编译（启用CGO需关闭交叉编译）；
 * 远程程序调用,跨平台、跨语言进程间通信；
-* 数据可视化库，后台编译生成html；
+* 高并发处理 ，性能优化；
+* 数据可视化；
+
 #### awesomePet 有哪些功能？
 * [Echo](https://echo.labstack.com/)：高性能、可扩展、简约的的Go Web框架;
 * [GORM](https://gorm.io/)：全功能数据库 orm 引擎；

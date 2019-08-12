@@ -31,7 +31,7 @@ func FileWrite(filePath string, file *multipart.FileHeader) (err error) {
 
 func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	var builder strings.Builder
-	// 向builder中写入字符/字符串
+	// 向builder中写入字符
 	builder.WriteString(OriginalFilePath)
 	builder.WriteString(uid)
 	builder.WriteString("/")
