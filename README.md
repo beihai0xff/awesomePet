@@ -9,7 +9,7 @@
 
 ## Usage
 #### Requirements
-Go version >= 1.11 and GO111MODULE=on；mysql >= 5.5.3；配置 conf.yaml 文件
+Go version >= 1.11 and GO111MODULE=on；mysql >= 5.5.3 and utf8mb4；配置 conf.yaml 文件
 #### Build & Run
 ```bash
 $ git clone https://github.com/wingsxdu/awesomePet.git
