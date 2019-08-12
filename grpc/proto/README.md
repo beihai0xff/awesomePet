@@ -9,5 +9,5 @@ $ go get -u github.com/golang/protobuf/protoc-gen-go
 ```
 #### compile proto source code
 ```bash
-$ protoc --go_out=plugins=grpc:. hello.proto
+$ protoc --go_out=plugins=grpc:. create.proto
 ```
