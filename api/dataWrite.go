@@ -1,7 +1,6 @@
 package api
 
 import (
-	"awesomePet/api/debug"
 	. "awesomePet/models"
 	"bytes"
 	"github.com/disintegration/imaging"
@@ -38,9 +37,9 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 	builder.WriteString("/")
 	tempPath := builder.String()
 	err := os.MkdirAll(tempPath, os.ModePerm) // mkdir
-	debug.PrintErr(err)
+	PrintErr(err)
 	err = os.MkdirAll(ThumbnailFilePath+uid, os.ModePerm) // mkdir
-	debug.PanicErr(err)
+	PanicErr(err)
 	var m Pet
 	var i uint
 	files := form.File["files"]
@@ -65,7 +64,7 @@ func MultipartFileWrite(uid string, form *multipart.Form) (*Pet, error) {
 		err = dst.Close()
 		err = src.Close()
 		hash, err := DataHash(filePath)
-		debug.PrintErr(err)
+		PrintErr(err)
 		ext := path.Ext(filePath)
 		if err = os.Rename(filePath, tempPath+hash+ext); err != nil {
 			_ = os.Remove(filePath)

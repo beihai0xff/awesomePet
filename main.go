@@ -2,7 +2,7 @@ package main
 
 import (
 	"awesomePet/action"
-	"awesomePet/api/debug"
+	"awesomePet/api"
 	"awesomePet/echarts"
 	"awesomePet/gorm_mysql"
 	"awesomePet/grpc"
@@ -101,10 +101,10 @@ type Conf struct {
 
 func (c Conf) ReadConfig() {
 	data, err := ioutil.ReadFile("config.yaml")
-	debug.PanicErr(err)
+	api.PanicErr(err)
 	fmt.Println(string(data))
 	err = yaml.Unmarshal(data, &c)
-	debug.PanicErr(err)
+	api.PanicErr(err)
 	args := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Mysql.UserName, c.Mysql.UserPassword, c.Mysql.Address, c.Mysql.Database)
 	fmt.Println(args)

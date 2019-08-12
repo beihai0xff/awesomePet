@@ -21,14 +21,14 @@ func CreateAccount(user *User, userInfo *UserInfo) error {
 	return tx.Commit().Error
 }
 
-func CreatePet(pet *Pet) (err error) {
+func CreatePet(pet *Pet) error {
 	return db.Create(pet).Error
 }
 
-func CreateUser(user *User) (err error) {
+func CreateUser(user *User) error {
 	return db.Create(user).Error
 }
 
-func CreateUserInfo(userInfo *UserInfo) (err error) {
+func CreateUserInfo(userInfo *UserInfo) error {
 	return db.Create(userInfo).Error
 }

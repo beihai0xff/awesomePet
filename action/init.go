@@ -1,15 +1,15 @@
 package action
 
 import (
-	"awesomePet/api/debug"
+	"awesomePet/api"
 	. "awesomePet/models"
 	"os"
 )
 
 func Init() {
 	err := os.MkdirAll(OriginalPPPath, os.ModePerm) // mkdir
-	debug.PanicErr(err)
+	api.PanicErr(err)
 	err = os.MkdirAll(ThumbnailPPPath, os.ModePerm) // mkdir
-	debug.PanicErr(err)
+	api.PanicErr(err)
 
 }

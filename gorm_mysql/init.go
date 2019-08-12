@@ -1,7 +1,7 @@
 package gorm_mysql
 
 import (
-	"awesomePet/api/debug"
+	"awesomePet/api"
 	. "awesomePet/models"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -13,7 +13,7 @@ var db *gorm.DB // 全局变量用 =
 func Init(args *string) {
 	var err error
 	db, err = gorm.Open("mysql", *args)
-	debug.PanicErr(err)
+	api.PanicErr(err)
 	db.DB().SetMaxIdleConns(100)
 	db.DB().SetMaxOpenConns(1000)
 	db.LogMode(true)       // 启用Logger，显示详细日志
