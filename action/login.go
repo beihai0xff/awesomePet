@@ -26,7 +26,7 @@ func Register(c echo.Context) error {
 	if gorm_mysql.HasUser(m.Uid) {
 		return c.JSON(http.StatusOK, models.ResultWithNote{Result: false, Note: "该用户已存在"})
 	} else {
-		//pbkdf2加密
+		// pbkdf2加密
 		salt := make([]byte, 32)
 		_, err := rand.Read(salt)
 		if err != nil {
@@ -34,9 +34,6 @@ func Register(c echo.Context) error {
 		}
 		key := pbkdf2.Key([]byte(m.Password), salt, 1323, 32, sha256.New)
 		User := models.User{Uid: m.Uid, Salt: hex.EncodeToString(salt), Key: hex.EncodeToString(key)}
-		/*		if err = gorm_mysql.CreateUser(&User); err != nil {
-				return err
-			}*/
 		UserInfo := models.UserInfo{
 			Uid:         m.Uid,
 			Nickname:    m.UserName,
@@ -46,9 +43,6 @@ func Register(c echo.Context) error {
 			City:        m.City,
 			Street:      m.Street,
 		}
-		/*		if err = gorm_mysql.CreateUserInfo(&UserInfo); err != nil {
-				return err
-			}*/
 		if err = gorm_mysql.CreateAccount(&User, &UserInfo); err != nil {
 			return err
 		}
@@ -104,7 +98,7 @@ func Reset(c echo.Context) error {
 	}
 	key := pbkdf2.Key([]byte(m.OldPassword), getSalt, 1323, 32, sha256.New)
 	if hex.EncodeToString(key) == userInfo.Key {
-		//pbkdf2加密
+		// pbkdf2加密
 		salt := make([]byte, 32)
 		_, err = rand.Read(salt)
 		if err != nil {
@@ -134,16 +128,15 @@ func ProfilePhoto(c echo.Context) error {
 	tempPath := models.OriginalPPPath + file.Filename
 	if err = api.FileWrite(tempPath, file); err != nil {
 		fmt.Println(err)
-		return err //data copy
+		return err // data copy
 	}
 	ext := path.Ext(tempPath)
 	filename := uidString + ext
 	if err = os.Rename(tempPath, models.OriginalPPPath+filename); err != nil {
 		err = os.Remove(tempPath)
-		return err //file rename
+		return err // rename file
 	}
-	//生成缩略图
-	if err := api.ShowPP(filename); err != nil { //生成缩略图
+	if err := api.ShowPP(filename); err != nil { // 生成缩略图
 		err = os.Remove(filename)
 		return err
 	}
