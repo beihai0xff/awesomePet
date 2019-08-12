@@ -60,7 +60,7 @@ func main() {
 	//search := jwt.Group("/search")
 
 	//查看请求信息
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/info", func(c echo.Context) error {
 		req := c.Request()
 		format := `
 			<code>

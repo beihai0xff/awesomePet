@@ -61,8 +61,8 @@ func Login(c echo.Context) error {
 	if err := c.Bind(m); err != nil {
 		return err
 	}
-	userPassword, err := gorm_mysql.GetUserPassword(&m.Uid)
-	if err != nil {
+	userPassword := models.User{Uid: m.Uid}
+	if err := gorm_mysql.GetUserPassword(&userPassword); err != nil {
 		return err
 	}
 	getSalt, err := hex.DecodeString(userPassword.Salt)
@@ -94,8 +94,8 @@ func Reset(c echo.Context) error {
 		return err
 	}
 	fmt.Printf("uid为: %d 密码为: %s \n", m.Uid, m.OldPassword)
-	userInfo, err := gorm_mysql.GetUserPassword(&m.Uid)
-	if err != nil {
+	userInfo := models.User{Uid: m.Uid}
+	if err := gorm_mysql.GetUserPassword(&userInfo); err != nil {
 		return err
 	}
 	getSalt, err := hex.DecodeString(userInfo.Salt)
@@ -166,8 +166,8 @@ func GetUserInfo(c echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	uidString := claims["uid"].(string)
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
-	m, err := gorm_mysql.GetUserInfo(&uid)
-	if err != nil {
+	m := models.UserInfo{Uid: uid}
+	if err := gorm_mysql.GetUserInfo(&m); err != nil {
 		return err
 	}
 	return c.JSON(http.StatusOK, m)
@@ -203,8 +203,8 @@ func DeleteUser(c echo.Context) error {
 	uidString := claims["uid"].(string)
 	uid, _ := strconv.ParseUint(uidString, 10, 64)
 	password := c.FormValue("password")
-	userPassword, err := gorm_mysql.GetUserPassword(&uid)
-	if err != nil {
+	userPassword := models.User{Uid: uid}
+	if err := gorm_mysql.GetUserPassword(&userPassword); err != nil {
 		return err
 	}
 	getSalt, err := hex.DecodeString(userPassword.Salt)

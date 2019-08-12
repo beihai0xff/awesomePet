@@ -4,31 +4,25 @@ import (
 	. "awesomePet/models"
 )
 
-func GetUserPassword(uid *uint64) (*User, error) {
-	m := new(User)
-	err := db.Where("uid = ?", uid).First(m).Error
-	return m, err
+func GetUserPassword(m *User) error {
+	return db.First(m).Error
 }
 
-func GetUserInfo(uid *uint64) (*UserInfo, error) {
-	m := new(UserInfo)
-	err := db.Where("uid = ?", uid).First(m).Error
-	return m, err
+func GetUserInfo(m *UserInfo) error {
+	return db.First(m).Error
 }
 
 func GetUserBlog(uid *uint64) (*[]Pet, error) {
 	var m []Pet
-	err := db.Where("uid = ?", uid).Find(&m).Error
-	if err != nil {
+	if err := db.Where("uid = ?", uid).Find(&m).Error; err != nil {
 		return &m, err
 	}
 	for i := range m {
-		err = db.Model(&m[i]).Related(&m[i].Pic, "refer_id").Error
-		if err != nil {
+		if err := db.Model(&m[i]).Related(&m[i].Pic, "refer_id").Error; err != nil {
 			return &m, err
 		}
 	}
-	return &m, err
+	return &m, nil
 }
 
 func GetBlogById(pet *Pet) error {
