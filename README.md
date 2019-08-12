@@ -15,8 +15,8 @@ Go version >= 1.11 and GO111MODULE=on；mysql >= 5.5.3；配置 conf.yaml 文件
 $ git clone https://github.com/wingsxdu/awesomePet.git
 $ cd Wade && go build
 $ export GOPROXY=https://goproxy.io // 存在网络环境问题的可以设置代理
-$ chmod a+x Wade // linux 下赋予文件执行权限
-$ ./Wade
+$ chmod a+x awesomePet // linux 下赋予文件执行权限
+$ ./awesomePet
 ```
 打开浏览器访问：<https://localhost:443/info> 查看请求信息
 
