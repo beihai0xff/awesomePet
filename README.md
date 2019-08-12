@@ -18,7 +18,7 @@ $ export GOPROXY=https://goproxy.io // 存在网络环境问题的可以设置�
 $ chmod a+x Wade // linux 下赋予文件执行权限
 $ ./Wade
 ```
-打开浏览器访问：<https://localhost:443/info> 查看 http 请求信息
+打开浏览器访问：<https://localhost:443/info> 查看请求信息
 
 ## Features
 * 跨平台开发与交叉编译（启用CGO需关闭交叉编译）；
