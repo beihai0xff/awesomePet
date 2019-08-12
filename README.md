@@ -43,7 +43,7 @@ $ ./awesomePet
 #### Noticed
 * TLS 使用自签名证书，有效期为一年，更新证书指令：
 ```bash
-$ cd Wade && go run $GOROOT/src/crypto/tls/generate_cert.go --host localhost
+$ cd awesomePet && go run $GOROOT/src/crypto/tls/generate_cert.go --host localhost
 ```
 * IDE: Goland，为方便作者在多设备上编程，.idea 文件夹一并上传到 github 上，可自行删除。
 
