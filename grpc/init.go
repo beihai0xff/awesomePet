@@ -7,7 +7,7 @@ import (
 
 var conn *grpc.ClientConn
 
-func Init() {
+func init() {
 	var err error
 	conn, err = grpc.Dial(RpcAddress, grpc.WithInsecure())
 	api.PanicErr(err)

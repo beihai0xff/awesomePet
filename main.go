@@ -5,7 +5,6 @@ import (
 	"awesomePet/api"
 	"awesomePet/echarts"
 	"awesomePet/gorm_mysql"
-	"awesomePet/grpc"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,10 +14,17 @@ import (
 	"runtime"
 )
 
-func main() {
-	done := make(chan int)
-	go Init(done)
+// init()函数会在每个包完成初始化后自动执行，并且执行优先级比 main 函数高。
+func init() {
+	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
+	fmt.Println("run CPUs number:", runtime.NumCPU())
+	var c = Conf{}
+	c.ReadConfig()
+	fmt.Println("\n\n\n初始化完成")
+}
 
+func main() {
+	//Init()
 	e := echo.New()
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Logger())
@@ -74,18 +80,7 @@ func main() {
 		return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))
 	})
 
-	done <- 1
 	e.Logger.Fatal(e.StartTLS(":443", "./cert.pem", "./key.pem"))
-}
-
-func Init(done chan int) {
-	runtime.GOMAXPROCS(runtime.NumCPU() * 6)
-	fmt.Println("run CPUs number:", runtime.NumCPU())
-	var c = Conf{}
-	c.ReadConfig()
-	action.Init()
-	grpc.Init()
-	<-done
 }
 
 // correctly populate the data.
@@ -99,7 +94,7 @@ type Conf struct {
 	}
 }
 
-func (c Conf) ReadConfig() {
+func (c *Conf) ReadConfig() {
 	data, err := ioutil.ReadFile("config.yaml")
 	api.PanicErr(err)
 	fmt.Println(string(data))

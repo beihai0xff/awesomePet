@@ -1,6 +1,6 @@
 module awesomePet
 
-go 1.12
+go 1.13
 
 require (
 	github.com/chenjiandongx/go-echarts v0.0.0-20190728043558-70059cac90d5
