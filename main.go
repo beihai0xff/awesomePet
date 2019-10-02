@@ -20,7 +20,7 @@ func init() {
 	fmt.Println("run CPUs number:", runtime.NumCPU())
 	var c = Conf{}
 	c.ReadConfig()
-	fmt.Println("\n\n\n初始化完成")
+	fmt.Println("\n初始化完成")
 }
 
 func main() {

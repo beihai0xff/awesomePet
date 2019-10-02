@@ -12,13 +12,16 @@ var db *gorm.DB // 全局变量用 =
 
 func Init(args *string) {
 	var err error
+	done := make(chan bool)
+	go api.Loading(done)
 	db, err = gorm.Open("mysql", *args)
 	api.PanicErr(err)
+	close(done)
+
 	db.DB().SetMaxIdleConns(100)
 	db.DB().SetMaxOpenConns(1000)
 	db.LogMode(true)       // 启用Logger，显示详细日志
 	db.SingularTable(true) // 全局禁用表名复数
-	fmt.Println("mysql数据库已连接，检查表结构中...")
 	CreateTable("User", &User{})
 	CreateTable("UserInfo", &UserInfo{})
 	CreateTable("Pet", &Pet{})
