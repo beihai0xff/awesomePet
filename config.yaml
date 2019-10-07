@@ -1,6 +1,6 @@
 mysql:
-  UserName: xyz
+  UserName: root
   UserPassword: 123qweasd
-  Address: www.wingsxdu.com:3306
+  Address: localhost:3306
   Database: pet
 gRPCAddress : 127.0.0.1:1330
