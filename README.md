@@ -1,7 +1,7 @@
-# awesomePet（文档编写中）
+# @Desperated 已作废
+# awesomePet
 
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
-![Build Status](https://img.shields.io/badge/building-passing-green)
 [![Support](https://img.shields.io/badge/ECHO-V4-yellow)](https://echo.labstack.com/)
 ![Support](https://img.shields.io/badge/Mysql-8.0%2B-green)
 
