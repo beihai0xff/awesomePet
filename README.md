@@ -5,7 +5,7 @@
 [![Support](https://img.shields.io/badge/ECHO-V4-yellow)](https://echo.labstack.com/)
 ![Support](https://img.shields.io/badge/Mysql-8.0%2B-green)
 
-一个使用 Golang 编写的后端服务学习案例——在线宠物分享
+一个使用 Golang 编写的后端服务案例——在线宠物分享
 
 ## Usage
 #### Requirements
@@ -34,7 +34,7 @@ $ ./awesomePet
 * [Protocol Buffers](https://github.com/protocolbuffers/protobuf)：配合gRPC使用；
 
 ## others
-#### About Author——追求 源于热爱
+#### About Author
 欢迎反馈使用过程中遇到的问题，可用以下联系方式跟我交流：
 * 邮箱：beihai@wingsxdu.com；
 * QQ：1844848686；
