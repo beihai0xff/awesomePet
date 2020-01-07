@@ -47,8 +47,3 @@ $ cd awesomePet && go run $GOROOT/src/crypto/tls/generate_cert.go --host localho
 ```
 * IDE: Goland，为方便作者在多设备上编程，.idea 文件夹一并上传到 github 上，可自行删除。
 
-#### why awesomePet?
-* 只是想做一个golang 后端开发的案例，并设计(脑部）了一个应用场景——在线宠物分享
-* 搬砖民工也会建成自己的罗马帝国。
-
-#### Thanks
