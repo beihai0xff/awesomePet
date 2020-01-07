@@ -1,4 +1,4 @@
-# @Desperated 已作废
+# @Desperated 已作废，糟糕的设计与编码
 # awesomePet
 
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
