@@ -37,7 +37,6 @@ $ ./awesomePet
 #### About Author
 欢迎反馈使用过程中遇到的问题，可用以下联系方式跟我交流：
 * 邮箱：beihai@wingsxdu.com；
-* QQ：1844848686；
 * blog：<https://www.wingsxdu.com> @beihai
 
 #### Noticed
